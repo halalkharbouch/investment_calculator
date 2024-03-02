@@ -4,9 +4,11 @@ export default function Results({ results }) {
   let totalInterest = 0;
 
   const deriveTotalInterest = (data) => {
-    const total = Math.round((totalInterest += data));
+    const total = (totalInterest += data);
     return total;
   };
+
+  const deriveTotalInvestedCapital = () => {};
   return (
     <table id="result">
       <thead>
@@ -19,15 +21,18 @@ export default function Results({ results }) {
         </tr>
       </thead>
       <tbody>
-        {results.map((data, index) => (
-          <tr key={index}>
-            <td>{data.year}</td>
-            <td>{formatter.format(data.valueEndOfYear)}</td>
-            <td>{formatter.format(data.interest)}</td>
-            <td>{formatter.format(deriveTotalInterest(data.interest))}</td>
-            <td>{formatter.format(data.annualInvestment)}</td>
-          </tr>
-        ))}
+        {results.map((data) => {
+          const totalInterest = deriveTotalInterest(data.interest);
+          return (
+            <tr key={data.year}>
+              <td>{data.year}</td>
+              <td>{formatter.format(data.valueEndOfYear)}</td>
+              <td>{formatter.format(data.interest)}</td>
+              <td>{formatter.format(totalInterest)}</td>
+              <td>{formatter.format(data.valueEndOfYear - totalInterest)}</td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );

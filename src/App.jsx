@@ -13,24 +13,24 @@ const INITIAL_STATE = {
 
 function App() {
   const [formData, setFormData] = useState({ ...INITIAL_STATE });
-  
   let results = calculateInvestmentResults(formData);
+  const durationIsValid = formData.duration >= 1;
 
   const handleChange = (event) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [event.target.id]: event.target.value,
+      [event.target.id]: +event.target.value,
     }));
-    
-
     results = calculateInvestmentResults(formData);
-    
   };
   return (
     <main>
       <Header />
       <UserForm onChange={handleChange} formData={formData} />
-      <Results results={results}/>
+      {!durationIsValid && (
+        <p className="center">Please enter a duration greater than zero.</p>
+      )}
+      {durationIsValid && <Results results={results} />}
     </main>
   );
 }
